@@ -10,7 +10,7 @@
     color: #000;
 }
 body{
-    height: 100vh;
+    height: 100%;
     background: #000;
     color: #0f0;
     display: flex;
