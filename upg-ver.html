@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>colander</title>
+    <meta name="description" content="ultra.">
+    <meta name="keywords" content="exif">
+    <meta name="author" content="apoloblvck">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#000">
+
+    <link rel="icon" href="icon/1.png" type="image/x-icon">
+    <link rel="shortcut icon" href="icon/1.png" type="image/x-icon">
+    <link rel="stylesheet" href="upg-ver.css">
+
+</head>
+<body>
+        
+    <h1>REMOVE EXIF DATA FROM IMAGE :<div id="select-text">No file selected.</div></h1>
+    
+    <div id="buttons">
+        <pre id="pre2">
+.     .     .
+|`-._/ \_.-`|
+|  _______  |
+| |__/-\[]| |
+| |  (_)  | |
+\ |_______| /
+ \         / 
+   '.___.'   
+        </pre>    
+        <label for="fileInput" class="button">
+            <input type="file" id="fileInput" accept="image/*" onclick="none()">
+            Choose a file
+        </label>
+        <button onclick="removeEXIF()" class="button">Remove EXIF Data</button>    
+        <a id="downloadLink" class="button" style="display: none;" onclick="none()">Download Image</a>
+    </div> 
+
+
+
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const select_text = document.getElementById('select-text');
+
+        function none() {
+            fileInput.value = "";
+            select_text.innerText = "No file selected.";
+            const a = document.getElementById('downloadLink');
+            a.style.display = 'none';
+        }
+
+        function removeEXIF() {
+
+            const file = fileInput.files[0];
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const image = new Image();
+                image.src = event.target.result;
+                image.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    ctx.drawImage(image, 0, 0);
+
+                    const url = canvas.toDataURL('image/jpeg');
+                    const fileName = (file.name).split('.').slice(0, -1).join('.') + '(colander_version)' + '.' + (file.name).split('.').pop();
+
+                    const a = document.getElementById('downloadLink');
+                    a.href = url;
+                    a.setAttribute('download', fileName);
+                    a.style.display = 'flex';
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        fileInput.addEventListener('change', function(event) {
+
+            if (event.target.files && event.target.files[0]) {
+                const selectedFile = event.target.files[0];
+                select_text.innerText = selectedFile.name;
+            }else{
+                select_text.innerText = "No file selected.";
+            }
+
+        });
+
+    </script>
+</body>
+</html>
+
